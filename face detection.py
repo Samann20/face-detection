@@ -1,17 +1,15 @@
 import cv2
 import numpy as np
 
-# Load the pre-trained Haar cascade for face and eye detection
 face_cap = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 eye_cap = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
 
-# Check if cascades loaded properly
 if face_cap.empty() or eye_cap.empty():
     print("Error loading Haar cascade XML files. Please check OpenCV installation.")
     exit()
 
 video_cap = cv2.VideoCapture(0)
-face_detected = False  # Flag to track if a face has been detected
+face_detected = False  
 
 patient_name = input("Enter the patient's name: ")
 patient_age = input("Enter the patient's age: ")
@@ -35,7 +33,7 @@ def check_for_swelling(face):
     """Estimate swelling based on face region area."""
     x, y, w, h = face
     face_area = w * h
-    if face_area > 10000:  # Adjust threshold based on experimentation
+    if face_area > 10000:  
         return True
     return False
 
@@ -67,11 +65,9 @@ while True:
             if check_for_red_eyes(eyes, video_data, (x, y)):
                 print("⚠️  Possible sign of red eyes detected. Please consult a healthcare provider.")
 
-            # Check for swelling
             if check_for_swelling((x, y, w, h)):
                 print("⚠️  Possible sign of facial swelling detected. Please consult a healthcare provider.")
 
-    # Draw rectangles on faces
     for (x, y, w, h) in faces:
         cv2.rectangle(video_data, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
